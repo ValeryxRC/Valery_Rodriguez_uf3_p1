@@ -26,7 +26,7 @@ class FilmActorSeeder extends Seeder
                     "film_id" => $faker->numberBetween(1, $lastFilmID),
                     "actor_id" => $faker->numberBetween(1, $lastActorID),
                     "created_at" => now(),
-                    "updated_at" => now(),
+                    "updated_at" => null,
                 ]
             );
         }

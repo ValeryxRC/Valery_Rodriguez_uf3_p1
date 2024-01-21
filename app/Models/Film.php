@@ -16,4 +16,5 @@ class Film extends Model
         duration,
         img_url
     ];
+    
 }
