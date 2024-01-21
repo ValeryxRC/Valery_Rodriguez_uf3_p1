@@ -15,4 +15,5 @@ class Actor extends Model
         country,
         img_url
     ];
+    
 }

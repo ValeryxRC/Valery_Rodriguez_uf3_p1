@@ -12,4 +12,5 @@ class FilmActor extends Model
         film_id,
         actor,id
     ];
+    
 }

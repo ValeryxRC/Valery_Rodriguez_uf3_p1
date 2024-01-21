@@ -26,7 +26,7 @@ class FilmFakerSeeder extends Seeder
                     "duration" => $faker->numberBetween(60, 240),
                     "img_url" => $faker->imageUrl(),
                     "created_at" => now(),
-                    "updated_at" => now(),
+                    "updated_at" => null,
                 ]
             );
         }
