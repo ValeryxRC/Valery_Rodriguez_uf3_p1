@@ -7,8 +7,7 @@ use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
 
-
-class FilmActorSeeder extends Seeder
+class FilmsReviewSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,19 +16,13 @@ class FilmActorSeeder extends Seeder
     {
         $faker = Faker::create();
         $lastFilmID = DB::table("films")->max("id");
-        $lastActorID = DB::table("actors")->max("id");
-
-        // Insertar datos ficticios en la tabla intermedia film_actors
-        for ($i = 0; $i < 10; $i++) {
-            DB::table('films_actors')->insert(
+        for ($i=0; $i < 10; $i++) { 
+            DB::table('films_review')->insert(
                 [
                     "film_id" => $faker->numberBetween(1, $lastFilmID),
-                    "actor_id" => $faker->numberBetween(1, $lastActorID),
-                    "created_at" => now(),
-                    "updated_at" => null,
+                    "calification" => $faker->numberBetween(1,10),
                 ]
-            );
+                );
         }
     }
 }
-
