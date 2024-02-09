@@ -8,7 +8,7 @@
 <style>
     header{
         background-color: #c138bc61;
-        padding: 10px;
+        padding: 0px;
     }
     header a *{
         display: inline-block;

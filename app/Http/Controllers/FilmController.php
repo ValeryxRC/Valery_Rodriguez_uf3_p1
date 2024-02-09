@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class FilmController extends Controller
 {
@@ -10,8 +11,14 @@ class FilmController extends Controller
     /**
      * Read films from storage
      */
-    public static function readFilms(): array {
-        $films = Storage::json('/public/films.json');
+    public static function readFilms() {
+        if(env('DATAS') == 'JSON')$films = Storage::json('/public/films.json');
+        if(env('DATAS') == 'MYSQL'){
+            $filmsCollection = DB::table('films')->get();
+            $films = $filmsCollection->map(function ($film) {
+                return get_object_vars($film);
+            });
+        }
         return $films;
     }
     /**
@@ -64,8 +71,7 @@ class FilmController extends Controller
         $films = FilmController::readFilms();
 
         //if year and genre are null
-        if (is_null($year) && is_null($genre))
-            return view('films.list', ["films" => $films, "title" => $title]);
+        if (is_null($year) && is_null($genre))return view('films.list', ["films" => $films, "title" => $title]);
 
         //list based on year or genre informed
         foreach ($films as $film) {
@@ -169,25 +175,41 @@ class FilmController extends Controller
         $url = $_POST['url'];
         $duration = $_POST['duration'];
         
+        
         if($this->isFilm($name)){
             session()->flash('error', 'La película ya existe');
             return redirect("/");
         }
-        //Convierto el Json de Films en un array, añado la film y sobreescribo el Json
-        $films_path=  'public/films.json';
-        $data = $this::readFilms();
-        $new_film = [
-            "name" => $name,
-            "year" => $year,
-            "genre" => $genre,
-            "img_url" => $url,
-            "country" => $country,
-            "duration" => $duration
-        ];        
-        $data[]=$new_film;
-        $update_json_data = json_encode($data, JSON_PRETTY_PRINT);
-        Storage::put($films_path, $update_json_data);
-        return redirect("/filmout/films");
+
+        if(env('DATAS') == 'JSON'){
+            //Convierto el Json de Films en un array, añado la film y sobreescribo el Json
+            $films_path=  'public/films.json';
+            $data = $this::readFilms();
+            $new_film = [
+                "name" => $name,
+                "year" => $year,
+                "genre" => $genre,
+                "img_url" => $url,
+                "country" => $country,
+                "duration" => $duration
+            ];        
+            $data[]=$new_film;
+            $update_json_data = json_encode($data, JSON_PRETTY_PRINT);
+            Storage::put($films_path, $update_json_data);
+            return redirect("/filmout/films");
+        }    
+        if(env('DATAS') == 'MYSQL'){
+            DB::table('films')->insert([
+                'name' => $name,
+                'year' => $year,
+                'genre' => $genre,
+                'country' => $country,
+                'duration' => $duration,
+                'img_url' => $url,
+                "created_at" => now(),
+            ]);
+            return redirect("/filmout/films");
+        }    
     }
 
     /**
@@ -195,11 +217,19 @@ class FilmController extends Controller
      * @return $isFilm
      */
     public function isFilm($name){
-        $films = $this::readFilms();
-        $isFilm = false;
-        foreach ($films as $film) {
-            if($film["name"] == $name) $isFilm = true;
-        }
-        return $isFilm;
+        // if(env('DATAS') == 'JSON'){
+            $films = $this::readFilms();
+            $isFilm = false;
+            foreach ($films as $film) {
+                if($film["name"] == $name) $isFilm = true;
+            }
+            return $isFilm;
+        // }
+        // if(env('DATAS') == 'MYSQL'){
+        //     $film = DB::table('films')->where('name', '==', $name)->count();
+        //     $isFilm = $film == 0? false : true;
+        //     return $isFilm;
+        // }
+        
     }
 }

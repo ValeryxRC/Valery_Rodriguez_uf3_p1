@@ -28,14 +28,30 @@
         </tr>
 
         @foreach($films as $film)
-            <tr>
-                <td>{{$film['name']}}</td>
-                <td>{{$film['year']}}</td>
-                <td>{{$film['genre']}}</td>
-                <td><img src={{$film['img_url']}} style="width: 100px; heigth: 120px;" /></td>
-                <td>{{$film['country']}}</td>
-                <td>{{$film['duration']}}</td>
-            </tr>
+            @if(env('DATAS') == 'JSON')
+                <tr>
+                    <td>{{$film['name']}}</td>
+                    <td>{{$film['year']}}</td>
+                    <td>{{$film['genre']}}</td>
+                    <td><img src={{$film['img_url']}} style="width: 100px; heigth: 120px;" /></td>
+                    <td>{{$film['country']}}</td>
+                    <td>{{$film['duration']}}</td>
+                </tr>
+            @endif
+            @if(env('DATAS') == 'MYSQL')
+                <tr>
+                    <td>{{$film['id']}}</td>
+                    <td>{{$film['name']}}</td>
+                    <td>{{$film['year']}}</td>
+                    <td>{{$film['genre']}}</td>
+                    <td>{{$film['country']}}</td>
+                    <td>{{$film['duration']}}</td>
+                    <td><img src={{$film['img_url']}} style="width: 100px; heigth: 120px;" /></td>
+                    <td>{{$film['created_at']}}</td>
+                    <td>{{$film['updated_at']}}</td>
+                    
+                </tr>
+            @endif
         @endforeach
     </table>
 </div>

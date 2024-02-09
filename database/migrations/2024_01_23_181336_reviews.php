@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('film_id');
             $table->integer('calification');
             $table->primary('film_id');
-            $table->foreign('film_id')->references('id')->on('films')->onDelete('cascade');
+            $table->foreigngit ('film_id')->references('id')->on('films')->onDelete('cascade');
         });
     }
 
