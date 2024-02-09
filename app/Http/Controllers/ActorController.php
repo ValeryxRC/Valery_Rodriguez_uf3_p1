@@ -49,7 +49,7 @@ class ActorController extends Controller
     public function countActors()
     {
         $totalActors =  DB::table('actors')->count();
-        return view("count", ["count" => $totalActors]);
+        return view("actors.count", ["count" => $totalActors]);
     }
 
     /**

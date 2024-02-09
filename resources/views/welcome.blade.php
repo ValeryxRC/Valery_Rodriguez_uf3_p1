@@ -68,7 +68,7 @@
     <h1 class="mt-4">Lista de Actores</h1>
     <ul>
         <li><a href=/actorout/actors class="btn btn-info">Actores</a></li>
-        <li><a href=/actorout/actorsCount class="btn btn-info">Pelis Contador</a></li>
+        <li><a href=/actorout/actorsCount class="btn btn-info">Actores Contador</a></li>
     </ul>
     <h2>Buscar Actor por década</h2>
     <form action="{{route('listActorsByDecade')}}" method="GET">
