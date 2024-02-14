@@ -14,7 +14,9 @@ class FilmController extends Controller
     public static function readFilms() {
         if(env('DATAS') == 'JSON')$films = Storage::json('/public/films.json');
         if(env('DATAS') == 'MYSQL'){
-            $filmsCollection = DB::table('films')->get();
+            $filmsCollection = DB::table('films')
+            ->where('visible', true)
+            ->get();
             $films = $filmsCollection->map(function ($film) {
                 return get_object_vars($film);
             });
@@ -231,5 +233,18 @@ class FilmController extends Controller
         //     return $isFilm;
         // }
         
+    }
+
+
+    public function deleteFilm($id){
+        $hiddenFilm = DB::table('films')
+        ->where('id', $id)
+        ->update(['visible' => false, 'updated_at' => now()]);
+
+        if ($hiddenFilm) {
+            return response()->json(['action' => 'delete', 'status' => "true", 'message' => 'The film is hidden']);
+        } else {
+            return response()->json(['action' => 'delete', 'status' => "Failed delete", 'message' => "Error hidden film"]);
+        }
     }
 }
