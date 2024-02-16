@@ -160,7 +160,7 @@ class FilmController extends Controller
     {
         $films = FilmController::readFilms();
         $totalFilms = count($films);
-        return view("count", ["count" => $totalFilms]);
+        return view("films.count", ["count" => $totalFilms]);
     }
 
     //Metodo para Adjuntar Imagenes
